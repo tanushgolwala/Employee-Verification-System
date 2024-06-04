@@ -5,6 +5,7 @@ import { Progress } from "../ui/progress";
 import Link from "next/link";
 import { Button } from "../ui/button";
 import { ModeToggle } from "../toggle";
+import { AlertDialog, AlertDialogAction, AlertDialogCancel, AlertDialogContent, AlertDialogDescription, AlertDialogFooter, AlertDialogHeader, AlertDialogTitle, AlertDialogTrigger } from "../ui/alert-dialog";
 
 interface Employee {
     ID: number;
@@ -25,35 +26,54 @@ export default function Valid() {
     const [searchTerm, setSearchTerm] = useState<string>('');
     const [currentPage, setCurrentPage] = useState<number>(1);
 
+
+
     useEffect(() => {
-        const fetchEmployees = async () => {
-            try {
-                const response = await fetch(`https://0660-103-175-52-42.ngrok-free.app/employees`, {
-                    headers: {
-                        'Content-Type': 'application/json',
-                        'ngrok-skip-browser-warning': '12345'
-                    }
-                });
-
-                if (response.ok) {
-                    const data = await response.json();
-                    setEmployees(data);
-                } else {
-                    console.error("Failed to fetch users data");
-                }
-            } catch (error) {
-                console.error("Error fetching users data:", error);
-            } finally {
-                setLoading(false);
-            }
-        };
-
         fetchEmployees();
     }, []);
 
-    useEffect(() => {
-        console.log("employees: ", employees);
-    }, [employees]);
+    const fetchEmployees = async () => {
+        try {
+            const response = await fetch(`https://e75a-103-175-52-42.ngrok-free.app/employees`, {
+                headers: {
+                    'Content-Type': 'application/json',
+                    'ngrok-skip-browser-warning': '12345'
+                }
+            });
+
+            if (response.ok) {
+                const data = await response.json();
+                setEmployees(data);
+            } else {
+                console.error("Failed to fetch users data");
+            }
+        } catch (error) {
+            console.error("Error fetching users data:", error);
+        } finally {
+            setLoading(false);
+        }
+    };
+
+    const handleDelete = async (id: number) => {
+        try {
+            const response = await fetch(`https://e75a-103-175-52-42.ngrok-free.app/employee/${id}`, {
+                method: 'DELETE',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'ngrok-skip-browser-warning': '12345'
+                }
+            });
+            if (response.ok) {
+                const data = await response.json();
+                setEmployees(data);
+            } else {
+                console.error("Failed to delete employee");
+            }
+        } catch (error) {
+            console.error("Error deleting employee:", error);
+        }
+        fetchEmployees();
+    };
 
     const requestSort = (key: keyof Employee) => {
         let direction: SortDirection = 'ascending';
@@ -106,7 +126,7 @@ export default function Valid() {
                 <Link href="/">
                     <Button variant="outline">Back</Button>
                 </Link>
-                <h1 className="text-3xl font-bold">USERS</h1>
+                <h1 className="text-3xl font-bold">EMPLOYEES</h1>
                 <ModeToggle />
             </div>
             <div className="flex justify-end px-4">
@@ -134,6 +154,7 @@ export default function Valid() {
                             <TableHead onClick={() => requestSort('name')}>Name</TableHead>
                             <TableHead onClick={() => requestSort('contact')}>Contact Number</TableHead>
                             <TableHead onClick={() => requestSort('yob')}>Year of Birth</TableHead>
+                            <TableHead>Actions</TableHead>
                         </TableRow>
                         <TableBody>
                             {paginatedEmployees.map((employee) => (
@@ -142,6 +163,27 @@ export default function Valid() {
                                     <TableCell>{employee.name}</TableCell>
                                     <TableCell>{employee.contact}</TableCell>
                                     <TableCell>{employee.yob}</TableCell>
+                                    <TableCell className="justify-evenly space-x-4">
+                                        <Button variant="outline">Edit</Button>
+                                        <AlertDialog>
+                                            <AlertDialogTrigger>
+                                                <Button variant="destructive">Delete</Button>
+                                            </AlertDialogTrigger>
+                                            <AlertDialogContent>
+                                                <AlertDialogHeader>
+                                                    <AlertDialogTitle>Are you absolutely sure?</AlertDialogTitle>
+                                                    <AlertDialogDescription>
+                                                        This action cannot be undone. This will permanently delete your account
+                                                        and remove your data from our servers.
+                                                    </AlertDialogDescription>
+                                                </AlertDialogHeader>
+                                                <AlertDialogFooter>
+                                                    <AlertDialogCancel>Cancel</AlertDialogCancel>
+                                                    <AlertDialogAction onClick={() => handleDelete(employee.ID)}>Continue</AlertDialogAction>
+                                                </AlertDialogFooter>
+                                            </AlertDialogContent>
+                                        </AlertDialog>
+                                    </TableCell>
                                 </TableRow>
                             ))}
                         </TableBody>
@@ -151,16 +193,16 @@ export default function Valid() {
                             <button
                                 key={page}
                                 onClick={() => handlePageChange(page + 1)}
-                                className={`px-3 py-1 mx-1 ${
-                                    currentPage === page + 1 ? "bg-gray-500 text-white" : "bg-transparent text-gray-500"
-                                }`}
+                                className={`px-3 py-1 mx-1 ${currentPage === page + 1 ? "bg-gray-500 text-white" : "bg-transparent text-gray-500"
+                                    }`}
                             >
                                 {page + 1}
                             </button>
                         ))}
                     </div>
                 </div>
-            )}
-        </div>
+            )
+            }
+        </div >
     )
 }

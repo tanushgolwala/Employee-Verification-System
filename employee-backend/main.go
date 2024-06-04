@@ -12,8 +12,11 @@ import (
 func SetupRoutes(app *fiber.App) {
 	app.Use(cors.New())
 
+	app.Post("/bulk", employee.BulkCreate)
 	app.Post("/employee", employee.CreateEmployee)
 	app.Get("/employees", employee.GetEmployees)
+	app.Delete("/employee/:id", employee.DeleteEmployee)
+	app.Put("/employee/:id", employee.UpdateEmployee)
 }
 
 func main() {

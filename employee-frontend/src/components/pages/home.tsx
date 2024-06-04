@@ -14,6 +14,10 @@ export default function HomePage() {
         setSelectedFile(file || null);
     };
 
+    const handleView = () => {
+        router.push("/valid");
+    }
+
     const handleUpload = () => {
         if (selectedFile) {
             const formData = new FormData();
@@ -23,19 +27,19 @@ export default function HomePage() {
                 method: "POST",
                 body: formData
             })
-            .then(response => {
-                if (response.ok) {
-                    console.log("File uploaded successfully");
-                    // Reset selected file after upload
-                    setSelectedFile(null);
-                    router.push("/valid ");
-                } else {
-                    console.error("Failed to upload file");
-                }
-            })
-            .catch(error => {
-                console.error("Error occurred while uploading file:", error);
-            });
+                .then(response => {
+                    if (response.ok) {
+                        console.log("File uploaded successfully");
+                        // Reset selected file after upload
+                        setSelectedFile(null);
+                        router.push("/valid ");
+                    } else {
+                        console.error("Failed to upload file");
+                    }
+                })
+                .catch(error => {
+                    console.error("Error occurred while uploading file:", error);
+                });
         } else {
             console.log("Please select a file.");
         }
@@ -49,11 +53,12 @@ export default function HomePage() {
                 </Link>
                 <h1 className="text-5xl font-bold">EMPLOYEE</h1>
             </div>
-            <div className="my-[10vh]">
+            <div className="my-[10vh] mx-auto">
                 <input type="file" onChange={handleFileChange} />
             </div>
-            <div className="my-[10vh]">
-                <Button onClick={handleUpload}>Upload</Button>
+            <div className="flex flex-row justify-evenly my-[10vh] max-w-[40vw] mx-auto">
+                <Button variant="outline" onClick={handleUpload}>Upload</Button>
+                <Button variant="outline" onClick={handleView}>View List</Button>
             </div>
         </div>
     );
