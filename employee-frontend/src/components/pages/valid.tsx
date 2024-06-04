@@ -8,6 +8,7 @@ import { ModeToggle } from "../toggle";
 import { AlertDialog, AlertDialogAction, AlertDialogCancel, AlertDialogContent, AlertDialogDescription, AlertDialogFooter, AlertDialogHeader, AlertDialogTitle, AlertDialogTrigger } from "../ui/alert-dialog";
 import EditDrawer from "../elements/editdrawer";
 import CreateDrawer from "../elements/createdrawer";
+import { useToast } from "../ui/use-toast";
 
 interface Employee {
     ID: number;
@@ -27,6 +28,7 @@ export default function Valid() {
     const [sortConfig, setSortConfig] = useState<{ key: keyof Employee; direction: SortDirection } | null>(null);
     const [searchTerm, setSearchTerm] = useState<string>('');
     const [currentPage, setCurrentPage] = useState<number>(1);
+    const { toast } = useToast();
 
     useEffect(() => {
         fetchEmployees();
@@ -56,7 +58,7 @@ export default function Valid() {
 
     const handleDelete = async (id: number) => {
         try {
-            const response = await fetch(`https://e75a-103-175-52-42.ngrok-free.app/employee/${id}`, {
+            const response = await fetch(`http://127.0.0.1:8000/employee/${id}`, {
                 method: 'DELETE',
                 headers: {
                     'Content-Type': 'application/json',
@@ -66,6 +68,7 @@ export default function Valid() {
             if (response.ok) {
                 const data = await response.json();
                 setEmployees(data);
+
             } else {
                 console.error("Failed to delete employee");
             }
@@ -73,6 +76,10 @@ export default function Valid() {
             console.error("Error deleting employee:", error);
         }
         fetchEmployees();
+        toast({
+            title: "Employee Deleted",
+            description: "Employee has been successfully deleted",
+        });
     };
 
     const requestSort = (key: keyof Employee) => {

@@ -23,7 +23,7 @@ export default function HomePage() {
             const formData = new FormData();
             formData.append("file", selectedFile);
 
-            return fetch("https://0660-103-175-52-42.ngrok-free.app/employee", {
+            return fetch("http://127.0.0.1:8000/bulk", {
                 method: "POST",
                 body: formData
             })
