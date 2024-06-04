@@ -48,7 +48,7 @@ export default function EditDrawer({ gormid = 0 }: EditDrawerProps) {
                 yob: parseInt(formData.yob, 10),
             };
             // Make API call to localhost
-            const response = await fetch(`https://e75a-103-175-52-42.ngrok-free.app/employee/${gormid}`, {
+            const response = await fetch(`http://127.0.0.1:8000/employee/${gormid}`, {
                 method: "PUT",
                 headers: {
                     'Content-Type': 'application/json',

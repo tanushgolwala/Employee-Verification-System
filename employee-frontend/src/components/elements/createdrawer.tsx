@@ -51,7 +51,7 @@ export default function CreateDrawer() {
                 employee_id: parseInt(employee_id, 10),
                 yob: parseInt(yob, 10),
             };
-            const response = await fetch(`https://e75a-103-175-52-42.ngrok-free.app/employee`, {
+            const response = await fetch(`http://127.0.0.1:8000/employee`, {
                 method: "POST",
                 headers: {
                     'Content-Type': 'application/json',

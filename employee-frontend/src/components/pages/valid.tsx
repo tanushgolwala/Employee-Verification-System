@@ -34,7 +34,7 @@ export default function Valid() {
 
     const fetchEmployees = async () => {
         try {
-            const response = await fetch(`https://e75a-103-175-52-42.ngrok-free.app/employees`, {
+            const response = await fetch(`http://127.0.0.1:8000/employees`, {
                 headers: {
                     'Content-Type': 'application/json',
                     'ngrok-skip-browser-warning': '12345'
