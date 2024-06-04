@@ -6,6 +6,8 @@ import Link from "next/link";
 import { Button } from "../ui/button";
 import { ModeToggle } from "../toggle";
 import { AlertDialog, AlertDialogAction, AlertDialogCancel, AlertDialogContent, AlertDialogDescription, AlertDialogFooter, AlertDialogHeader, AlertDialogTitle, AlertDialogTrigger } from "../ui/alert-dialog";
+import EditDrawer from "../elements/editdrawer";
+import CreateDrawer from "../elements/createdrawer";
 
 interface Employee {
     ID: number;
@@ -25,8 +27,6 @@ export default function Valid() {
     const [sortConfig, setSortConfig] = useState<{ key: keyof Employee; direction: SortDirection } | null>(null);
     const [searchTerm, setSearchTerm] = useState<string>('');
     const [currentPage, setCurrentPage] = useState<number>(1);
-
-
 
     useEffect(() => {
         fetchEmployees();
@@ -130,6 +130,7 @@ export default function Valid() {
                 <ModeToggle />
             </div>
             <div className="flex justify-end px-4">
+                <CreateDrawer />
                 <input
                     type="text"
                     placeholder="Search"
@@ -164,7 +165,8 @@ export default function Valid() {
                                     <TableCell>{employee.contact}</TableCell>
                                     <TableCell>{employee.yob}</TableCell>
                                     <TableCell className="justify-evenly space-x-4">
-                                        <Button variant="outline">Edit</Button>
+                                        {/* <Button variant="outline">Edit</Button> */}
+                                        <EditDrawer gormid={employee.ID} />
                                         <AlertDialog>
                                             <AlertDialogTrigger>
                                                 <Button variant="destructive">Delete</Button>

@@ -10,14 +10,17 @@ import (
 
 func UpdateEmployee(c *fiber.Ctx) error {
 	var updatedEmployee models.Employee
+	id := c.Params("id")
+	log.Printf("%v", updatedEmployee)
 
 	if err := c.BodyParser(&updatedEmployee); err != nil {
 		return c.Status(400).SendString("Error parsing updated employee")
 	}
 
-	result := database.Database.Db.Model(&models.Employee{}).Where("id = ?", updatedEmployee.ID).Updates(updatedEmployee)
+	result := database.Database.Db.Model(&models.Employee{}).Where("id = ?", id).Updates(updatedEmployee)
 
 	if result.Error != nil {
+
 		return c.Status(500).SendString("Error updating employee")
 	}
 
